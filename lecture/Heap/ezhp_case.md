@@ -219,16 +219,21 @@ gdb-peda$ x/256wx 0x804c018-12
             ~~~~size    ~~~ next    ~~~ prev
 ```
 
-double free는 linked list의 next/ prev를 가리키는 포인터를 조작하면서 발생하는 overflow이기 때문에
-이점을 잊어서는 안됨.
+double free는 linked list의 next/ prev를 가리키는 포인터를 조작하면서 발생하는 
+
+overflow이기 때문에 이점을 잊어서는 안됨.
 
 `unlink()` 함수가 동작하면, 
+
 1. 삭제되는 node의 prev->next에 삭제되는 node의 next값이 저장됨.
+
 2. 삭제되는 node 바로 앞 (우리가 공격에 사용했던 node 1) 노드의 next->prev에 삭제되는 노드의 prev 주소를 넣음
 
 정리하면,
 1, 2에서 사용되는 삭제되는 노트의 next/ prev 주소를 우리는 공격을 통해서 변조 시킬 수 있음.
+
 `prev->next`에 덮어써질 주소는 `puts@plt`의 주소
+
 `next->prev`에 덮어써질 주소는 `SHELLCODE`의 주소
 
 ### 실험 3 
@@ -308,7 +313,7 @@ gdb-peda$ x/100wx 0x804c018-12
 0x804c11c:	0x41414141	0x41414141	0x41414141	0x41414141
 0x804c12c:	0x41414141	0x0804a000	0x0804c09c	0x00000000
                         ~~~ next    ~~~ prev
-``
+```
 
 변경이 모두 완료되었으며, 이제 공격을 진행해 보자.
 
