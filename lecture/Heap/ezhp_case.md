@@ -343,15 +343,21 @@ gdb-peda$ x/100wx 0x804c018-12
 ```
 
 우리가 예상했던 것과 동일하게 Node 2가 삭제되면서 Node 1의 next를 자신의 next로 저장하고,
+
 Node 1의 `next->prev`에 Node 2의 prev 값을 쓰려고 할 것이다.
 
 (공격 성공후 `puts@got.plt`)
+```
 gdb-peda$ x/4wx 0x0804a000+8
 0x804a008 <puts@got.plt>:	`0x0804c09c`	0x08048416	0x08048426	0xb7e23810
+```
 
 (공격 전 정상적인 `puts@got.plt`)
+```
 gdb-peda$ x/4wx 0x0804a000+8
 0x804a008 <puts@got.plt>:	`0x08048406`	0x08048416	0x08048426	0xb7e23810
+```
 
-정확히 우리가 원하는 곳에 prev값이 저장됨을 확인 할 수 있다.
-이를 통해서 exploit을 다음과 같이 작성해 보자.
+정확히 우리가 원하는 곳에 `prev`값이 저장됨을 확인 할 수 있다.
+
+이를 통해서 `exploit`을 다음과 같이 작성해 보자.
