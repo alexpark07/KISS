@@ -15,8 +15,10 @@ int main(int argc, char **argv)
     c = '\x64';
     p = buf;
     strncpy(p, "Hello World", 11);
-    printf("%s\n", p);
-
+    printf("char *p:%s\n", p);
+    printf("char buf:%s\n", buf);
+    printf("signed int: %d\n", i);
+    printf("unsigned int: %d\n", j);
 
     return 0xff;
 }
