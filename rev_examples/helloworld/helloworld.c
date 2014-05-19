@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 {
     int i;
     char c;
-    char buf[128];
+    char buf[128] = {0x00, };
     unsigned int j;
     char *p;
 
