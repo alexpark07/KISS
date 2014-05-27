@@ -15,7 +15,9 @@ HEAD += "\x00\x54\x80\x04\x08\x34\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3
 HEAD += "\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x80\x04\x08\x00\x80\x04\x08"
 TAIL  = "\x05\x00\x00\x00\x00\x10\x00\x00"
 
-sc = asm(shellcode.cat('/etc/passwd'))
+contents = 'This is my first time to write a overwrite shellcode in i386\n'
+sc = asm(shellcode.open_file('/tmp/flag', flags=0x2))
+sc += asm(shellcode.write_file(in_fd=4, contents=contents, size=len(contents)))
 
 payload = HEAD
 payload += p32(len(sc)) * 2
@@ -24,4 +26,4 @@ payload += sc
 
 open(OUTPUT, 'wb').write(payload)
 if os.path.exists(OUTPUT) == True:
-    os.chmod(OUTPUT, 755)
+    os.chmod(OUTPUT, 0755)
