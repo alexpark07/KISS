@@ -37,7 +37,7 @@ sc += asm(shellcode.write_file(3, s, len(s)))
 
 ### ls
 * tested on i386, ARM
-* have to write shellcode in amd64
+* done with arm64's getdents but not works properly.
 
 ``shellcraft -c i386 ls /etc -f r | demo32 -``
 
