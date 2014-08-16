@@ -1,6 +1,6 @@
 ## useful tools for auditing Android Arch.
 
-### Baby Step #1
+### First Step 
 
 ``dex2jar`` - [dex to jar](https://code.google.com/p/dex2jar/)
 
@@ -10,7 +10,7 @@
 
 ``apkzipper`` - [APK Zipper(kr)](http://ddwroom.tistory.com/category/%EC%9E%90%EC%9E%91%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8/ApkZipper)
 
-### Baby Step #2
+### Second Step
 
 ``apktool`` - [A tool for reverse engineering Android apk files](https://code.google.com/p/android-apktool/)
 
@@ -22,7 +22,7 @@
 
 ``signapk`` - [Code Signer](https://code.google.com/p/signapk/)
 
-### Baby Step #3
+### Final Step
 
 ``AndroGuard`` - [Reverse engineering, Malware and goodware analysis of Android applications](https://code.google.com/p/androguard/)
 
