@@ -20,3 +20,18 @@
 
 ``signapk`` - [Code Signer](https://code.google.com/p/signapk/)
 
+### Baby Step #3
+
+``AndroGuard`` - [Reverse engineering, Malware and goodware analysis of Android applications](https://code.google.com/p/androguard/)
+
+``APKInspector`` - [AndroidAnalysisGUI](https://github.com/honeynet/apkinspector/)
+
+``DroidBox`` - [Android Application Sandbox](https://code.google.com/p/droidbox/)
+
+``Smali/Baksmali`` - [An assembler/disassembler for Android's dex format](https://code.google.com/p/smali/)
+
+### Live CD 
+
+``ARE`` - [Android Reverse Engineering (A.R.E.) Virtual Machine](http://www.honeynet.org/node/783)
+
+``Santoku`` - [Mobile Forensics](https://santoku-linux.com/download)
