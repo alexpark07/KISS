@@ -8,7 +8,7 @@
 
 #### Code Signing
 
-``java -jar signapk.jar testkey.x509.pem testkey.pk8``
+``java -jar signapk.jar testkey.x509.pem testkey.pk8 apk_file_name_debuggable.apk apk_file_name_signed.apk``
 
 #### Run NetBeans for Dynamic Analysis
 
