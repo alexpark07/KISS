@@ -8,3 +8,5 @@
 ``VirusTotal`` - [VirusTotal](https://www.virustotal.com/)
 
 ``AndroTotal`` - [a free service to scan suspicious APKs against multiple mobile antivirus apps](http://andrototal.org/)
+
+``ApkScan`` - [Scan Android applications for malware](http://apkscan.nviso.be/)
