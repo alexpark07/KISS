@@ -19,20 +19,25 @@ def cleanup(fn):
                 pass
 
 def MakeXOR(size, xor=0x58):
+MAX_SC_SIZE = 256
+    LOOP_SC_SIZE = MAX_SC_SIZE - size
+
     XOR="""
     .global _start
     .section .text
 
     _start:
-        add r6, pc, #36
+        add r6, pc, #36+4
         bx  r6
 
     main:
         mov r4, #%s
+        #add r6, lr, #4
+        mov r6, lr
 
     loop:
-        cmp r4, #256
-        bxhi lr
+        cmp r4, #%s
+        bxhi r6
         sub r4, r4, #%s
         ldrb r5, [lr, r4]
         eor  r5, r5, #%s
@@ -43,7 +48,7 @@ def MakeXOR(size, xor=0x58):
         bl main
 
     scode:
-    """ % (size, size, xor, size+1)
+    """ % (LOOP_SC_SIZE, MAX_SC_SIZE, LOOP_SC_SIZE, xor, LOOP_SC_SIZE+1)
 
     fn = tempfile.mktemp() # binary file
     fn_s = fn + '.s' # as file
