@@ -1,5 +1,5 @@
 # dup() in ARM Mode
-def ARM_DUP(sock=4):
+def generate(sock=4):
     sc = """
     mov r9, #%s
     mov r8, #2
