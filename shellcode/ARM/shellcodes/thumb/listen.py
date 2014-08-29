@@ -1,5 +1,8 @@
 # listen(port)
-def ARM_THUMB_LISTEN(port=31337):
+
+from socket import ntohs
+
+def generate(port=31337):
     sc = """
     mov r0, #2
     mov r1, #1
