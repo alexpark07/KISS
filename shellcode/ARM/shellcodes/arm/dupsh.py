@@ -1,5 +1,9 @@
 # dupsh()
-def ARM_DUPSH(sock=4, binsh='/bin/sh'):
-    sc = ARM_DUP(sock)
-    sc += ARM_SH(binsh)
+
+import dup
+import sh
+
+def generate(sock=4, cmd='/bin/sh'):
+    sc = dup.generate(sock)
+    sc += sh.generate(cmd)
     return sc
