@@ -1,5 +1,5 @@
 # /bin/sh
-def ARM_THUMB_SH(sh='/bin/sh'):
+def generate(cmd='/bin/sh'):
     sc = """
     mov r0, pc
     add r0, #10
@@ -10,5 +10,5 @@ def ARM_THUMB_SH(sh='/bin/sh'):
     svc 1
 bin_sh_1:
     .asciz "%s\x00"
-    """ % (sh)
+    """ % (cmd)
     return sc
