@@ -4,7 +4,47 @@ import sys
 import tempfile
 from socket import ntohs
 
-__VERSION__ = '$0.0.3'
+##########################################################
+## Thumb Mode 
+##########################################################
+from shellcodes.thumb import dup         as th_dup
+from shellcodes.thumb import sh          as th_sh
+from shellcodes.thumb import dupsh       as th_dupsh
+from shellcodes.thumb import bindshell   as th_bindshell
+from shellcodes.thumb import listen      as th_listen
+from shellcodes.thumb import acceptloop  as th_acceptloop
+from shellcodes.thumb import connect     as th_connect
+from shellcodes.thumb import connectback as th_connectback
+from shellcodes.thumb import open_file   as th_open_file
+from shellcodes.thumb import sendfile    as th_sendfile
+
+##########################################################
+## ARM Mode
+##########################################################
+from shellcodes.arm import dup   as arm_dup
+from shellcodes.arm import sh    as arm_sh
+from shellcodes.arm import dupsh as arm_dupsh
+
+class thumbSCGen:
+    def __init__(self):
+        self.dup         = th_dup.generate
+        self.sh          = th_sh.generate
+        self.dupsh       = th_dupsh.generate
+        self.bindshell   = th_bindshell.generate
+        self.listen      = th_listen.generate
+        self.acceptloop  = th_acceptloop.generate
+        self.connect     = th_connect.generate
+        self.connectback = th_connectback.generate
+        self.open_file   = th_open_file.generate
+        self.sendfile    = th_sendfile.generate
+
+class armSCGen:
+    def __init__(self):
+        self.dup        = arm_dup.generate
+        self.sh         = arm_sh.generate
+        self.dupsh      = arm_dupsh.generate
+
+__VERSION__ = '$0.0.4'
 __AUTHOR__  = 'alex.park'
 
 # Assembler 
