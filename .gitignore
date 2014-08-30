@@ -1,5 +1,17 @@
 # ignore some files to avoid to upload to GITHUB
 
-.gdb_history
-peda-session*
 *.o
+*.hi
+*.pyc
+*~
+*.pdf
+*/auto/*
+*/bin/*
+build
+MANIFEST
+dist
+pwntools.egg-info
+.gdb_history
+temp
+*.swp
+*.bak
