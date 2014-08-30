@@ -17,6 +17,10 @@ from shellcodes.thumb import connect     as th_connect
 from shellcodes.thumb import connectback as th_connectback
 from shellcodes.thumb import open_file   as th_open_file
 from shellcodes.thumb import sendfile    as th_sendfile
+from shellcodes.thumb import cat         as th_cat
+from shellcodes.thumb import exit        as th_exit
+from shellcodes.thumb import findpeer    as th_findpeer
+from shellcodes.thumb import findpeersh  as th_findpeersh
 
 ##########################################################
 ## ARM Mode
@@ -37,6 +41,10 @@ class thumbSCGen:
         self.connectback = th_connectback.generate
         self.open_file   = th_open_file.generate
         self.sendfile    = th_sendfile.generate
+        self.cat         = th_cat.generate
+        self.exit        = th_exit.generate
+        self.findpeer    = th_findpeer.generate
+        self.findpeersh  = th_findpeersh.generate
 
 class armSCGen:
     def __init__(self):
