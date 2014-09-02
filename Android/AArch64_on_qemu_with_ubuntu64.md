@@ -1,0 +1,60 @@
+### A Quick'n'Dirty Set-up of an Aarch64 Ubuntu 14.04 VM with QEMU
+
+original link - [http://webkit.sed.hu/blog/](http://webkit.sed.hu/blog/20140816/quickndirty-set-aarch64-ubuntu-1404-vm-qemu)
+
+#### Build your own QEMU/Aarch64
+
+```
+sudo apt-get build-dep qemu # install the dependencies
+git clone git://git.qemu.org/qemu.git # get the source (at the time of writing, HEAD was at revision 69f87f713069f1f70f86cb65883f7d43e3aa21de)
+cd qemu
+./configure --target-list=aarch64-softmmu --enable-virtfs # configure for aarch64 (virtfs only needed if you'd like to mount up a dir of the host in the guest OS)
+make # build qemu (make install is not necessary)
+```
+
+#### Create a clean Aarch64 Ubuntu Core 14.04.1 image
+
+File link - [arm64-prepare-image-qemu.sh](http://webkit.sed.hu/sites/webkit.sed.hu/files/arm64-prepare-image-qemu.txt)
+
+```
+wget "http://cdimage.ubuntu.com/ubuntu-core/releases/14.04/release/ubuntu-core-14.04.1-core-arm64.tar.gz"
+./arm64-prepare-image-qemu.sh ubuntu-core-14.04.1-core-arm64.tar.gz # the script will sudo!
+```
+
+#### Get your hands on suitable kernel & initrd (for those who are lazy to build their own)
+
+```
+sudo apt-get install qemu-utils # install tools required to deal with the QCOW2 format
+wget "http://cloud-images.ubuntu.com/releases/14.04/release/ubuntu-14.04-server-cloudimg-arm64-disk1.img" # download the cloud image
+```
+
+```
+sudo modprobe nbd max_part=63
+sudo qemu-nbd -c /dev/nbd0 ubuntu-14.04-server-cloudimg-arm64-disk1.img
+mkdir mnt
+sudo mount /dev/nbd0p1 mnt
+```
+
+```
+sudo cp mnt/boot/vmlinuz-3.13.0-32-generic .
+sudo cp mnt/boot/initrd.img-3.13.0-32-generic .
+```
+
+```
+sudo umount mnt
+sudo qemu-nbd -d /dev/nbd0
+rmdir mnt
+```
+
+#### Run your brand new Aarch64 Ubuntu 14.04.1 system
+
+```
+./aarch64-softmmu/qemu-system-aarch64 -machine virt -cpu cortex-a57 -nographic -smp 1 -m 256 \
+        -global virtio-blk-device.scsi=off -device virtio-scsi-device,id=scsi \
+        -drive file=../qemu-images/ubuntu-core-14.04.1-core-arm64.img,id=coreimg,cache=unsafe,if=none -device scsi-hd,drive=coreimg \
+        -kernel ../qemu-images/vmlinuz-3.13.0-35-generic \
+        -initrd ../qemu-images/initrd.img-3.13.0-35-generic \
+        -netdev user,id=unet -device virtio-net-device,netdev=unet \
+        -net nic -net user,hostfwd=tcp:0.0.0.0:2222-10.0.2.15:22 -nographic \
+        --append "console=ttyAMA0 root=/dev/sda"
+```
