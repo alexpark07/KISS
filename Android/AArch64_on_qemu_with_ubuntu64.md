@@ -70,3 +70,71 @@ replace the default user networking (slirp) with a more powerful networking setu
 
 build your own kernel & initrd: good luck with that :)
 
+### Network stuff
+
+[Link Here](http://anddev.tistory.com/category/Virtualization)
+
+``apt-get install bridge-utils uml-utilities``
+
+```
+#
+# /etc/network/interfaces
+#
+
+#기존 eth0의 설정을 주석처리합니다.
+#auto eth0
+#iface eth0 inet dhcp 
+
+#br0 설정에 dhcp의 네트워크 설정을 추가합니다.
+#현재 예에서는 dhcp를 사용하고 있기 때문에 별다른 추가 옵션이 없지만
+#정적 IP를 사용하고 있다면 eth0의 정적 IP 옵션(address, gateway 등)을 br0 옵션에 추가해주면 됩니다.
+auto br0
+iface br0 inet dhcp
+    bridge_ports eth0
+    bridge_stp off
+    bridge_maxwait 0
+    bidge_fd 0 
+```
+
+```
+# brctl addbr br0
+# /etc/init.d/networking restart
+```
+
+```
+#
+#  /etc/qemu-ifup-br 
+#
+#!/bin/sh
+
+set -x
+
+switch=br0
+
+if [ -n "$1" ];then
+        /usr/bin/sudo /usr/sbin/tunctl -u `whoami` -t $1
+        /usr/bin/sudo /sbin/ip link set $1 up
+        sleep 0.5s
+        /usr/bin/sudo /sbin/brctl addif $switch $1
+        exit 0
+else
+        echo "Error: no interface specified"
+        exit 1
+fi
+```
+
+```
+# run.sh
+
+#!/bin/sh
+MAC=`printf 'DE:AD:BE:EF:%02X:%02X\n' $((RANDOM%256)) $((RANDOM%256))`
+
+./aarch64-softmmu/qemu-system-aarch64 -machine virt -cpu cortex-a57 -nographic -smp 1 -m 256 \
+        -global virtio-blk-device.scsi=off -device virtio-scsi-device,id=scsi \
+        -drive file=../qemu-images/ubuntu-core-14.04.1-core-arm64.img,id=coreimg,cache=unsafe,if=none -device scsi-hd,drive=coreimg \
+        -kernel ../qemu-images/vmlinuz-3.13.0-35-generic \
+        -initrd ../qemu-images/initrd.img-3.13.0-35-generic \
+        -device virtio-net-device,netdev=net0,mac=$MAC -netdev tap,id=net0,script=/etc/qemu-ifup-br \
+        -append "console=ttyAMA0 root=/dev/sda"
+        
+```
