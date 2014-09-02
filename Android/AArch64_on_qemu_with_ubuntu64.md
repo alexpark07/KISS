@@ -58,3 +58,15 @@ rmdir mnt
         -net nic -net user,hostfwd=tcp:0.0.0.0:2222-10.0.2.15:22 -nographic \
         --append "console=ttyAMA0 root=/dev/sda"
 ```
+
+### Customization
+
+So, all the above is OK, so-so, but not exactly what you want. Then, you may want to:
+
+change the size of the disk image holding the root fs: change the count=32768 argument of dd in the arm64-prepare-image-qemu script (specify size in MB).
+
+change the memory allocated for the VM: change the -m 4096 command line parameter of qemu-system-aarch64 (specify size in MB).
+replace the default user networking (slirp) with a more powerful networking setup: experiment with the -netdev command line options.
+
+build your own kernel & initrd: good luck with that :)
+
