@@ -74,7 +74,7 @@ build your own kernel & initrd: good luck with that :)
 
 [Link Here](http://anddev.tistory.com/category/Virtualization)
 
-``apt-get install bridge-utils uml-utilities``
+``sudo apt-get install bridge-utils uml-utilities``
 
 ```
 #
@@ -93,7 +93,7 @@ iface br0 inet dhcp
     bridge_ports eth0
     bridge_stp off
     bridge_maxwait 0
-    bidge_fd 0 
+    bridge_fd 0 
 ```
 
 ```
