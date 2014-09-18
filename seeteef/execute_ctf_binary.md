@@ -97,3 +97,9 @@ tcp        0      0 0.0.0.0:31337           0.0.0.0:*               LISTEN      
 alex@ubuntu:/home/ctf$ shellcraft cat /home/ctf/flag -f r | nc localhost 31337
 7b73d184b117905905e6398fcb6a5dd6
 ```
+
+## socat - port forwarding
+
+```
+socat TCP-LISTEN:80,fork TCP:destination_ip_address:80
+```
