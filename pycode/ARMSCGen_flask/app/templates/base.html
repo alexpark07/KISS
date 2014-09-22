@@ -7,12 +7,21 @@
         {% endif %}
         <link rel="stylesheet" href="{{ url_for('static',filename='css/pure-min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/skin-mine.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/prettify.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/colorbox.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-responsive.min.css') }}">
+        {# <link rel="stylesheet" href="{{
+        url_for('static',filename='css/style.css') }}"> #}
+
     </head>
     <body>
         <div>Shellcode Generator: 
-            <a href="/index">Home</a> | 
-            <a href="/help">Help</a> |
-            <a href="/about">about</a> |
+            <ul class="nav">
+                <li><a href="/index">Home</a></li> | 
+                <li><a href="/help">Help</a></li> |
+                <li><a href="/about">about</a></li> |
+            </ul>
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}
