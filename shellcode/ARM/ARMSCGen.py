@@ -3,6 +3,7 @@ import os
 import sys
 import tempfile
 from socket import ntohs
+from struct import unpack, pack
 
 ##########################################################
 ## Thumb Mode 
@@ -21,6 +22,12 @@ from shellcodes.thumb import cat         as th_cat
 from shellcodes.thumb import exit        as th_exit
 from shellcodes.thumb import findpeer    as th_findpeer
 from shellcodes.thumb import findpeersh  as th_findpeersh
+from shellcodes.thumb import getdents    as th_getdents
+from shellcodes.thumb import ls          as th_ls
+from shellcodes.thumb import setreuid    as th_setreuid
+from shellcodes.thumb import setregid    as th_setregid
+from shellcodes.thumb import read_from_stack as th_read_from_stack
+from shellcodes.thumb import write_to_stack  as th_write_to_stack
 
 ##########################################################
 ## ARM Mode
@@ -45,6 +52,12 @@ class thumbSCGen:
         self.exit        = th_exit.generate
         self.findpeer    = th_findpeer.generate
         self.findpeersh  = th_findpeersh.generate
+        self.getdents    = th_getdents.generate
+        self.ls          = th_ls.generate
+        self.setreuid    = th_setreuid.generate
+        self.setregid    = th_setregid.generate
+        self.read_from_stack = th_read_from_stack.generate
+        self.write_to_stack  = th_write_to_stack.generate
 
 class armSCGen:
     def __init__(self):
@@ -289,6 +302,43 @@ def saveShellcode(fn, sc):
         f.close()
     except:
         SYSERR("Failed to save the shellcode on disk")
+
+def u16(u):
+    return unpack('<h', u)[0]
+
+def getdent_to_list(rv):
+    """parses getdent's struct to human readable.
+    
+        args: 
+            rv (str): getdent's struct included file/directory name(s)
+        return:
+            fn (list): file/directory name(s)
+    """
+    i  = 0
+    fn = []
+    try:
+        while 1:
+            inode   = rv[i:i+4]
+            off     = rv[i+4:i+8]
+            st_size = u16(rv[i+8:i+10])
+            fname   = rv[i+10:i+st_size]
+
+            if st_size == 0:
+                break
+            xfname = fname.split('\x00')[0]
+
+            if len(xfname) != 0:
+                fn.append(xfname)
+            i = i + st_size
+            if i == len(rv):
+                break
+            if i > len(rv):
+                # weird but have to exit
+                break
+    except:
+        return fn.append('exception')
+
+    return fn
 
 def Test():
     # ARM
