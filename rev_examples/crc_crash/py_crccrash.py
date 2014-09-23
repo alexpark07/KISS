@@ -1,3 +1,5 @@
+# https://rdot.org/forum/showthread.php?s=cdfb948132c4ae696255974aa11d760d&p=35851#post35851
+
 from pwn import *
 context('i386', 'linux', 'ipv4')
 

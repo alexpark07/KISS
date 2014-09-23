@@ -1,3 +1,4 @@
+// http://code.google.com/p/lxyppc-snake/source/browse/trunk/crccrash/crccrash.c
 /**
   all these code is based on 
     http://www.pediy.com/bbshtml/BBS6/pediy6937.htm

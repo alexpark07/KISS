@@ -1,4 +1,31 @@
 {% extends "base.html" %}
 
+<div class="content">
 {% block content %}
+<pre>
+{{ result|safe }}
+<table border width=110 align=left>
+<tr><td>Thumb Mode</td></tr>
+{%- for t in thumb -%}
+<tr>
+<td><a href="/thumb/{{t}}">{{t}}</a></td>
+</tr>
+{%- endfor -%}
+</table><table border width=110 align=left>
+<tr><td>ARM Mode</td></tr>
+{%- for t in arm -%}
+<tr>
+<td><a href="/arm/{{t}}">{{t}}</a></td>
+</tr>
+{%- endfor -%}
+</table><table border width=110 align=left>
+<tr><td>ARM64 Mode</td></tr>
+{%- for t in arm64 -%}
+<tr>
+<td><a href="/arm64/{{t}}">{{t}}</a></td>
+</tr>
+{%- endfor -%}
+</table>
+</pre>
 {% endblock %}
+</div>

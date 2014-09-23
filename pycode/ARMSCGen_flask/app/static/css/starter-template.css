@@ -1,0 +1,73 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 40px;
+}
+
+.container .jumbotron {
+  margin-top: 30px;
+  padding: 10px 30px;
+}
+
+.item {
+  padding: 0 10px 10px 10px;
+}
+
+.item .col-md-7 {
+  padding-top: 30px;
+}
+
+.item .col-md-7 .btn {
+  margin-left: 0;
+}
+
+.item_foot .price {
+  color: #BB0000;
+  display: block;
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  height: 20px;
+  line-height: 20px;
+  margin-right: 20px;
+}
+
+.item_foot .purchases {
+  background: url("//d85wutc1n854v.cloudfront.net/live/imgs/dlsmall.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+  color: #000000;
+  display: block;
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  height: 20px;
+  line-height: 20px;
+  padding-left: 22px;
+}
+
+.item_foot .when {
+  color: #555555;
+  float: right;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  padding-right: 2px;
+  text-align: right;
+  margin-right: 25px;
+}
+
+.item_foot {
+  margin-top: 15px;
+  overflow: hidden;
+  width: auto;
+}
+
+.template-row {
+  margin-bottom: 25px;
+}
+
+.screenshot {
+  background-color: #FFFFFF;
+  border: 1px solid #D1D1D1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  position: relative;
+  width: 422px;
+}
