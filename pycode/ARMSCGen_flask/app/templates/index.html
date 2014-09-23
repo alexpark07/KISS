@@ -4,21 +4,21 @@
 {% block content %}
 <pre>
 {{ result|safe }}
-<table border width=110 align=left>
+<table border=1 width=150 align=left style="border:1px solid gray">
 <tr><td>Thumb Mode</td></tr>
 {%- for t in thumb -%}
 <tr>
 <td><a href="/thumb/{{t}}">{{t}}</a></td>
 </tr>
 {%- endfor -%}
-</table><table border width=110 align=left>
+</table><table border=1 width=150 align=left style="border:0px solid gray">
 <tr><td>ARM Mode</td></tr>
 {%- for t in arm -%}
 <tr>
 <td><a href="/arm/{{t}}">{{t}}</a></td>
 </tr>
 {%- endfor -%}
-</table><table border width=110 align=left>
+</table><table border=1 width=150 align=left style="border:1px solid gray">
 <tr><td>ARM64 Mode</td></tr>
 {%- for t in arm64 -%}
 <tr>
