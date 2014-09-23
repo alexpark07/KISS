@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+<div class="content">
+{% block content %}
+<pre>
+$ scgen -a {{ mode }} {{ scodename }} -?
+
+{{ result }}
+</pre>
+{% endblock %}
+</div>
