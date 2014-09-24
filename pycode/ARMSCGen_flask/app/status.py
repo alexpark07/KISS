@@ -8,8 +8,7 @@ def getStatus():
     sc['arm']   = getShellcodeInfo('arm')
     sc['arm64'] = getShellcodeInfo('arm64')
     
-    result = '''
-by arch
+    result = '''by arch
 -------
 <a href="/thumb">Thumb</a> Mode: %s
 <a href="/arm">ARM</a>   Mode: %s

@@ -1,0 +1,22 @@
+/***************
+ * cascading style sheet for taviso, taviso@sdf.lonestar.org
+ * $Revision: 1.6 $
+ from http://taviso.decsystem.org/main.css
+ ***************************************************************/
+
+#dotbox {
+    border:             2px dashed #ffffff;
+    background-color:   #2f2f2f;
+    color:              #ffffff;
+    margin:             1em;
+    padding:            1em;
+}
+
+#dotbox2 {
+    border:             1px dashed #ffffff;
+    background-color:   #2f2f2f;
+    color:              #ffffff;
+    margin:             1em;
+    padding:            1em;
+}
+

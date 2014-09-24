@@ -7,6 +7,7 @@
         {% endif %}
         <link rel="stylesheet" href="{{ url_for('static',filename='css/pure-min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/skin-mine.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/dotbox.css') }}">
         {#
         <link rel="stylesheet" href="{{ url_for('static',filename='css/prettify.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/colorbox.css') }}">
@@ -15,13 +16,12 @@
         <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-responsive.min.css') }}">
         #}
+        <script type=text/javascript src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 
     </head>
     <body class="pure-skin-mine">
         <div class="pure-g">
-             <div class="pure-u-1-24">
-             </div>
-             <div class="pure-u-22-24">
+             <div class="pure-u-22-24" id="dotbox">
                 <div class="pure-menu pure-menu-open pure-menu-horizontal">
                     <a href="/" class="pure-menu-heading">Shellcode Generator</a>
                     <ul>
@@ -30,6 +30,7 @@
                     <li><a href="/about">about</a></li>
                     </ul>
                 </div>
+        {#
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
@@ -39,6 +40,7 @@
         </ul>
         {% endif %}
         {% endwith %}
+        #}
         {% block content %} {% endblock %}
             </div>
         </div>

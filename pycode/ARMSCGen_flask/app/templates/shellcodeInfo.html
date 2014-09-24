@@ -1,11 +1,85 @@
 {% extends "base.html" %}
 
-<div class="content">
 {% block content %}
+
+<script type=text/javascript>
+
+    $(document).ready(function() {
+        $('#btnSummit').click(function() {
+            var url = '/makeShellcode';
+            var scodename = $('input[name="scodename"]').val();
+            var option = $('input[name="option"]').val();
+            var arch = $('input[name="arch"]').val();
+            var format = $('select[name="format"]').val();
+            var xor = $('input[name="xoring"]').is(":checked") == true;
+            if( xor == true ) {
+                xxor = 1;
+            } else {
+                xxor = 0;
+            }
+
+            var params = "arch="+arch+"&scodename="+scodename+"&option="+option+"&format="+format+"&xoring="+xxor;
+            $.post(url, params, function(data) {
+                $('#result').empty();
+                $('#result').text(data);
+            });
+        });
+    });
+
+    <!--
+    function getshellcode() {
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: params,
+            dataType: "html",
+            success: function(args) {
+                alert(args);
+                $("#result").text(args);
+            },
+            beforeSend:showRequest,
+            error: function(e) {
+                alert(e.responseText);
+            }
+        });
+    }
+    //-->
+</script>
+
+<div class="content" id="dotbox2">
 <pre>
 $ scgen -a {{ mode }} {{ scodename }} -?
 
-{{ result }}
+{{ result -}}
 </pre>
-{% endblock %}
 </div>
+
+<div class="pure-control-group">
+    &nbsp;&nbsp;&nbsp;<label for="shellcode">Option if need</label>
+    <input type="text" size="40" name="option" class="pure-input" placeholder="options" required>
+    <input type="hidden" name="arch" id="arch" value="{{ mode }}">
+    <input type="hidden" name="scodename" id="scodename" value="{{ scodename }}">
+    <button type="submit" name="btnSummit" id="btnSummit"  class="pure-button">Make Shellcode</button>
+</div>
+<div class="pure-control-group">
+    &nbsp;&nbsp;&nbsp;<label for="_format">Output format</label>
+        <select name="format" id="format" class="pure-input">
+            <option selected>asm</option>
+            <option>string</option>
+            <option>c</option>
+            <option>hex</option>
+        </select>
+</div>
+<div class="pure-control-group">
+    &nbsp;&nbsp;&nbsp;<label for="_xoring" class="pure-checkbox">XOR</label>
+    <input name="xoring" value="1" type="checkbox">
+</div>
+
+<div class="content2" id="dotbox2">
+<pre>
+<span id="result"></span>
+</pre>
+</div>
+
+{% endblock %}
