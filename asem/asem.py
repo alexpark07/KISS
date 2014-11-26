@@ -46,14 +46,14 @@ def compile(fn):
         return -1
 
     tempfn = '%s.tmp1' % (fn)
-    if g_arch == 'i386':
+    if (g_arch == 'i386') or (g_arch == 'amd64'):
         cmd = 'objcopy -j.text -Obinary %s.o %s' % (fn, tempfn)
-    elif g_arch == 'amd64':
-        cmd = 'objcopy -j.text -Obinary %s.o %s' % (fn, tempfn)
-    elif g_arch == 'arm':
-        cmd = '%s -j.text -Obinary %s.o %s' % (OBJDUMP, fn, tempfn)
-    elif g_arch == 'thumb':
-        cmd = '%s -j.text -Obinary %s.o %s' % (OBJDUMP, fn, tempfn)
+    elif (g_arch == 'arm') or (g_arch == 'thumb'):
+        cmd = '%s -j.text -Obinary %s.o %s' % (OBJCOPY, fn, tempfn)
+    else:
+        print "What kind of arch do you want to use"
+        return -1
+
     os.system(cmd)
     if os.path.exists(tempfn) == False:
         print "There is no result: objdump"
