@@ -162,10 +162,9 @@ if __name__ == '__main__':
                    choices = ['r', 'raw',
                               's', 'str', 'string',
                               'h', 'hex',
-                              'c',
-                              'p', 'py', 'python',
+                              'c'
                              ],
-                   help = '{r}aw, {s}tring, {h}ex, {a}sm, {c} for C code, {p|py}thon for python code',
+                   help = '{r}aw, {s}tring, {h}ex, {c} for C code if encoded',
                    ) 
 
     parser.add_option('-d', '--disassemble',
