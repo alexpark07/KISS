@@ -1,3 +1,5 @@
+// code from http://stackoverflow.com/questions/1191374/subprocess-with-timeout
+
 from os import kill
 from signal import alarm, signal, SIGALRM, SIGKILL
 from subprocess import PIPE, Popen
