@@ -8,6 +8,10 @@ OBJDUMP = 'arm-linux-gnueabi-objdump'
 OBJCOPY = 'arm-linux-gnueabi-objcopy'
 AS      = 'arm-linux-gnueabi-as'
 
+ARM64_OBJDUMP = 'aarch64-linux-gnu-objdump'
+ARM64_OBJCOPY = 'aarch64-linux-gnu-objcyop'
+ARM64_AS      = 'aarch64-linux-gnu-as'
+
 g_arch    = 'i386'
 g_format  = 'string'
 g_discode = False
@@ -36,6 +40,8 @@ def compile(fn):
         cmd = '%s %s.s -o %s.o' % (AS, fn, fn)
     elif g_arch == "thumb":
         cmd = '%s %s.s -o %s.o -mthumb' % (AS, fn, fn)
+    elif g_arch == "arm64":
+        cmd = '%s %s.s -o %s.o' % (ARM64_AS, fn, fn)
     elif g_arch == "i386":
         cmd = 'as %s.s -o %s.o --32' % (fn, fn)
     elif g_arch == "amd64":
@@ -50,6 +56,8 @@ def compile(fn):
         cmd = 'objcopy -j.text -Obinary %s.o %s' % (fn, tempfn)
     elif (g_arch == 'arm') or (g_arch == 'thumb'):
         cmd = '%s -j.text -Obinary %s.o %s' % (OBJCOPY, fn, tempfn)
+    elif (g_arch == 'arm64'):
+        cmd = '%s -j.text -Obinary %s.o %s' % (ARM64_OBJCOPY, fn, tempfn)
     else:
         print "What kind of arch do you want to use"
         return -1
@@ -101,7 +109,7 @@ def AsmCode(msg, fn):
         asm_src(msg, fn, '')
     elif g_arch == 'amd64':
         asm_src(msg, fn, '')
-    elif g_arch == 'arm':
+    elif g_arch == 'arm' or g_arch == 'arm64':
         asm_src(msg, fn, '.arm')
     elif g_arch == 'thumb':
         asm_src(msg, fn, '.thumb')
@@ -118,6 +126,8 @@ def DisCode(msg, fn):
         opt = '%s -D -b binary -marm %s > %s' % (OBJDUMP, fn, tempfn)
     elif g_arch == 'thumb':
         opt = '%s -D -b binary -marm -Mforce-thumb %s > %s' % (OBJDUMP, fn, tempfn)
+    elif g_arch == 'arm64':
+        opt = '%s -D -b binary -maarch64 %s > %s' % (ARM64_OBJDUMP, fn, tempfn)
     else:
         return -1
 
@@ -154,7 +164,7 @@ if __name__ == '__main__':
     parser.add_option('-a', '--architechture',
                    dest='arch',
                    type = str,
-                   help = 'options: thumb, arm, i386, amd64 (default: i386)')
+                   help = 'options: thumb, arm, arm64(aarch64), i386, amd64 (default: i386)')
 
     parser.add_option('-f', '--format',
                    dest = 'format',

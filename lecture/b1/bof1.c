@@ -9,12 +9,25 @@ void name(const char *str)
 
 int main(int argc, char **argv)
 {
+    FILE *fp;
+    char buf[256] = { 0x00, };
+
     if( argc != 2 ) {
         printf("Usage: %s [your name please]\n", argv[0]);
         return -1;
     }
 
-    name(argv[1]);
+    fp = fopen(argv[1], "r");
+    if (!fp) { 
+        fprintf(stdout, "failed to open file: %s\n", argv[1]);
+        return 0;
+    }
+
+
+    fread(buf, 1, 255, fp);
+    fclose(fp);
+
+    name(buf);
 
     return 0;
 }
