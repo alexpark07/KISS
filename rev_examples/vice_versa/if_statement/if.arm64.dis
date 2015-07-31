@@ -1,0 +1,46 @@
+0000000000400630 <main>:
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char **argv)
+{
+  400630:	a9bd7bfd 	stp	x29, x30, [sp,#-48]!
+  400634:	910003fd 	mov	x29, sp
+  400638:	b9001fa0 	str	w0, [x29,#28]
+  40063c:	f9000ba1 	str	x1, [x29,#16]
+    int i;
+
+    scanf ("%d", &i);
+  400640:	90000000 	adrp	x0, 400000 <_init-0x438>
+  400644:	911ce000 	add	x0, x0, #0x738
+  400648:	9100b3a1 	add	x1, x29, #0x2c
+  40064c:	97ffff99 	bl	4004b0 <__isoc99_scanf@plt>
+
+    if (i == 0) {
+  400650:	b9402fa0 	ldr	w0, [x29,#44]
+  400654:	6b1f001f 	cmp	w0, wzr
+  400658:	540000a1 	b.ne	40066c <main+0x3c>
+        printf("You inputed number 0\n");
+  40065c:	90000000 	adrp	x0, 400000 <_init-0x438>
+  400660:	911d0000 	add	x0, x0, #0x740
+  400664:	97ffff8f 	bl	4004a0 <puts@plt>
+  400668:	1400000c 	b	400698 <main+0x68>
+    } else if (i == 1) {
+  40066c:	b9402fa0 	ldr	w0, [x29,#44]
+  400670:	7100041f 	cmp	w0, #0x1
+  400674:	540000a1 	b.ne	400688 <main+0x58>
+        printf("You inputed number 1\n");
+  400678:	90000000 	adrp	x0, 400000 <_init-0x438>
+  40067c:	911d6000 	add	x0, x0, #0x758
+  400680:	97ffff88 	bl	4004a0 <puts@plt>
+  400684:	14000005 	b	400698 <main+0x68>
+    } else {
+        printf("You inputed number %d\n", i);
+  400688:	b9402fa1 	ldr	w1, [x29,#44]
+  40068c:	90000000 	adrp	x0, 400000 <_init-0x438>
+  400690:	911dc000 	add	x0, x0, #0x770
+  400694:	97ffff8b 	bl	4004c0 <printf@plt>
+    }
+
+    return 0;

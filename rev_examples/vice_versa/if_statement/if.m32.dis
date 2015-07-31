@@ -1,0 +1,48 @@
+0804849d <main>:
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char **argv)
+{
+ 804849d:	55                   	push   ebp
+ 804849e:	89 e5                	mov    ebp,esp
+ 80484a0:	83 e4 f0             	and    esp,0xfffffff0
+ 80484a3:	83 ec 20             	sub    esp,0x20
+    int i;
+
+    scanf ("%d", &i);
+ 80484a6:	8d 44 24 1c          	lea    eax,[esp+0x1c]
+ 80484aa:	89 44 24 04          	mov    DWORD PTR [esp+0x4],eax
+ 80484ae:	c7 04 24 a0 85 04 08 	mov    DWORD PTR [esp],0x80485a0
+ 80484b5:	e8 d6 fe ff ff       	call   8048390 <__isoc99_scanf@plt>
+
+    if (i == 0) {
+ 80484ba:	8b 44 24 1c          	mov    eax,DWORD PTR [esp+0x1c]
+ 80484be:	85 c0                	test   eax,eax
+ 80484c0:	75 0e                	jne    80484d0 <main+0x33>
+        printf("You inputed number 0\n");
+ 80484c2:	c7 04 24 a3 85 04 08 	mov    DWORD PTR [esp],0x80485a3
+ 80484c9:	e8 92 fe ff ff       	call   8048360 <puts@plt>
+ 80484ce:	eb 2b                	jmp    80484fb <main+0x5e>
+    } else if (i == 1) {
+ 80484d0:	8b 44 24 1c          	mov    eax,DWORD PTR [esp+0x1c]
+ 80484d4:	83 f8 01             	cmp    eax,0x1
+ 80484d7:	75 0e                	jne    80484e7 <main+0x4a>
+        printf("You inputed number 1\n");
+ 80484d9:	c7 04 24 b8 85 04 08 	mov    DWORD PTR [esp],0x80485b8
+ 80484e0:	e8 7b fe ff ff       	call   8048360 <puts@plt>
+ 80484e5:	eb 14                	jmp    80484fb <main+0x5e>
+    } else {
+        printf("You inputed number %d\n", i);
+ 80484e7:	8b 44 24 1c          	mov    eax,DWORD PTR [esp+0x1c]
+ 80484eb:	89 44 24 04          	mov    DWORD PTR [esp+0x4],eax
+ 80484ef:	c7 04 24 cd 85 04 08 	mov    DWORD PTR [esp],0x80485cd
+ 80484f6:	e8 55 fe ff ff       	call   8048350 <printf@plt>
+    }
+
+    return 0;
+ 80484fb:	b8 00 00 00 00       	mov    eax,0x0
+}
+ 8048500:	c9                   	leave  
+ 8048501:	c3                   	ret    

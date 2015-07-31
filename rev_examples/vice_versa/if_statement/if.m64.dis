@@ -1,0 +1,51 @@
+00000000004005ed <main>:
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char **argv)
+{
+  4005ed:	55                   	push   rbp
+  4005ee:	48 89 e5             	mov    rbp,rsp
+  4005f1:	48 83 ec 20          	sub    rsp,0x20
+  4005f5:	89 7d ec             	mov    DWORD PTR [rbp-0x14],edi
+  4005f8:	48 89 75 e0          	mov    QWORD PTR [rbp-0x20],rsi
+    int i;
+
+    scanf ("%d", &i);
+  4005fc:	48 8d 45 fc          	lea    rax,[rbp-0x4]
+  400600:	48 89 c6             	mov    rsi,rax
+  400603:	bf e4 06 40 00       	mov    edi,0x4006e4
+  400608:	b8 00 00 00 00       	mov    eax,0x0
+  40060d:	e8 de fe ff ff       	call   4004f0 <__isoc99_scanf@plt>
+
+    if (i == 0) {
+  400612:	8b 45 fc             	mov    eax,DWORD PTR [rbp-0x4]
+  400615:	85 c0                	test   eax,eax
+  400617:	75 0c                	jne    400625 <main+0x38>
+        printf("You inputed number 0\n");
+  400619:	bf e7 06 40 00       	mov    edi,0x4006e7
+  40061e:	e8 8d fe ff ff       	call   4004b0 <puts@plt>
+  400623:	eb 28                	jmp    40064d <main+0x60>
+    } else if (i == 1) {
+  400625:	8b 45 fc             	mov    eax,DWORD PTR [rbp-0x4]
+  400628:	83 f8 01             	cmp    eax,0x1
+  40062b:	75 0c                	jne    400639 <main+0x4c>
+        printf("You inputed number 1\n");
+  40062d:	bf fc 06 40 00       	mov    edi,0x4006fc
+  400632:	e8 79 fe ff ff       	call   4004b0 <puts@plt>
+  400637:	eb 14                	jmp    40064d <main+0x60>
+    } else {
+        printf("You inputed number %d\n", i);
+  400639:	8b 45 fc             	mov    eax,DWORD PTR [rbp-0x4]
+  40063c:	89 c6                	mov    esi,eax
+  40063e:	bf 11 07 40 00       	mov    edi,0x400711
+  400643:	b8 00 00 00 00       	mov    eax,0x0
+  400648:	e8 73 fe ff ff       	call   4004c0 <printf@plt>
+    }
+
+    return 0;
+  40064d:	b8 00 00 00 00       	mov    eax,0x0
+}
+  400652:	c9                   	leave  
+  400653:	c3                   	ret    

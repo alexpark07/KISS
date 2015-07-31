@@ -15,3 +15,7 @@ pwntools.egg-info
 temp
 *.swp
 *.bak
+*.m32
+*.m64
+*.arm32
+*.arm64
